@@ -6,8 +6,7 @@ class LogoApp extends StatefulWidget {
   _LogoAppState createState() => _LogoAppState();
 }
 
-class _LogoAppState extends State<LogoApp> with TickerProviderStateMixin{
-
+class _LogoAppState extends State<LogoApp> with TickerProviderStateMixin {
   Animation<double> animation;
   AnimationController controller;
 
@@ -15,20 +14,21 @@ class _LogoAppState extends State<LogoApp> with TickerProviderStateMixin{
   void initState() {
     super.initState();
 
-    controller = AnimationController(vsync: this, duration: const Duration(seconds:2));
-    animation = Tween<double>(begin: 0, end: 300).animate(controller)..addStatusListener((status){
-      if(status==AnimationStatus.completed){
-        controller.reverse();
-      } else if(status ==AnimationStatus.dismissed) {
-        controller.forward();
-      }
-    })..addStatusListener((state){
-      print('$state');
-    });
+    controller =
+        AnimationController(vsync: this, duration: const Duration(seconds: 2));
+    animation = Tween<double>(begin: 0, end: 300).animate(controller)
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          controller.reverse();
+        } else if (status == AnimationStatus.dismissed) {
+          controller.forward();
+        }
+      })
+      ..addStatusListener((state) {
+        print('$state');
+      });
     controller.forward();
-
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -44,18 +44,48 @@ class _LogoAppState extends State<LogoApp> with TickerProviderStateMixin{
   }
 }
 
-class AnimatedLogo extends AnimatedWidget{
+class AnimatedLogo extends AnimatedWidget {
   AnimatedLogo({Key key, Animation<double> animation})
       : super(key: key, listenable: animation);
 
-      @override
+  @override
   Widget build(BuildContext context) {
     final Animation<double> animation = listenable;
+    return GrowTransition(
+      child: LogoWidget(),
+      animation: animation,
+    );
+  }
+}
+
+class LogoWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
     return Container(
-        margin: EdgeInsets.symmetric(vertical: 10),
+      margin: EdgeInsets.symmetric(vertical: 10),
+      child: FlutterLogo(),
+    );
+  }
+}
+
+class GrowTransition extends StatelessWidget {
+  GrowTransition({this.child, this.animation});
+
+  Widget child;
+  Animation<double> animation;
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return AnimatedBuilder(
+      child: child,
+      animation: animation,
+      builder: (context, child) => Container(
         height: animation.value,
         width: animation.value,
-        child: FlutterLogo(),
-      );
+        child: child,
+      ),
+    );
   }
 }
