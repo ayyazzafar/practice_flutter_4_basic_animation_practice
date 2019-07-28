@@ -18,7 +18,6 @@ class MyAppState extends State<MyApp> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    var test = 222;
     animationController = AnimationController(
         vsync: this, duration: Duration(milliseconds: 4000));
     animation = CurvedAnimation(
